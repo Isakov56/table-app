@@ -1,0 +1,18 @@
+<div>
+    <h2>{{ selectedItem ? 'Edit Item' : 'Add New Item' }}</h2>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <label for="name">Name:</label>
+      <input id="name" formControlName="name" required>
+  
+      <label for="symbol">Symbol:</label>
+      <input id="symbol" formControlName="symbol" required>
+  
+      <label for="weight">Weight:</label>
+      <input id="weight" formControlName="weight" required>
+  
+      <button type="submit">{{ selectedItem ? 'Update' : 'Add' }}</button>
+    </form>
+  </div>
+  
+
+
