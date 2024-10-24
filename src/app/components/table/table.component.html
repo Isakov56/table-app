@@ -1,29 +1,22 @@
 <div>
     <h1>Data Table</h1>
-    <app-form [selectedItem]="selectedItem" (itemUpdated)="onItemUpdated($event)"></app-form>
-    
     <table>
-      <thead>
-        <tr>
-          <th>Position</th>
-          <th>Name</th>
-          <th>Weight</th>
-          <th>Symbol</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let element of elements" (click)="selectItem(element)">
-          <td>{{ element.position }}</td>
-          <td>{{ element.name }}</td>
-          <td>{{ element.weight }}</td>
-          <td>{{ element.symbol }}</td>
-        </tr>
-      </tbody>
+        <thead>
+            <tr>
+            <th>Position</th>
+            <th>Name</th>
+            <th>Weight</th>
+            <th>Symbol</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let element of passedData" (click)="selectItem(element)">
+            <td>{{ element.position }}</td>
+            <td>{{ element.name }}</td>
+            <td>{{ element.weight }}</td>
+            <td>{{ element.symbol }}</td>
+            </tr>
+        </tbody>
     </table>
-  </div>
-<!-- 
-<app-form
-  *ngIf="selectedItem"
-  [selectedItem]="selectedItem"
-  (itemUpdated)="onItemUpdated($event)">
-</app-form> -->
+    <app-form *ngIf="selectedItem" [selectedItem]="selectedItem" (itemUpdated)="onItemUpdated($event)"></app-form>
+</div>

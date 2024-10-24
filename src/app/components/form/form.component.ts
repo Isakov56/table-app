@@ -2,6 +2,9 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { DataService } from '../../services/data.service';
+import { Router, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'app-form',
@@ -15,18 +18,31 @@ export class FormComponent implements OnChanges, OnInit {
   @Output() itemUpdated = new EventEmitter<any>(); // Emit event to parent when item is updated
 
   form: FormGroup;
+  passedData: any;
+  routerSubscription: Subscription | undefined;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private dataService: DataService, private router: Router) {
     this.form = this.fb.group({
       name: '',
       symbol: '',
       weight: '',
     });
+
+    //Retrive the data passed via navigation state
+   const navigation = this.router.getCurrentNavigation()
+   this.passedData = navigation?.extras.state?.['data']
+   console.log(this.passedData, 'asdf;jlkaseyrti365')
   }
 
   ngOnInit(): void {
     if (this.selectedItem) {
       this.form.patchValue(this.selectedItem);
+      // this.routerSubscription = this.router.events.subscribe(event => {
+      //   if (event instanceof NavigationEnd) {
+      //     const navigation = this.router.getCurrentNavigation();
+      //     this.passedData = navigation?.extras.state?.['data'];
+      //   }
+      // });
     }
   }
 
@@ -45,7 +61,12 @@ export class FormComponent implements OnChanges, OnInit {
         ...this.form.value,
         id: this.selectedItem ? this.selectedItem.id : Date.now(), // Generate ID for new items
       };
-      this.itemUpdated.emit(updatedItem); // Emit the updated item back to the parent component
+
+      this.itemUpdated.emit(updatedItem);// Emit the updated item back to the parent component
+      this.dataService.addElement(updatedItem)
+      this.router.navigate(['/table'],{
+        state: {data: this.passedData}
+      })
     }
   }
 }
